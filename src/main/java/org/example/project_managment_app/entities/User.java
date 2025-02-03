@@ -24,5 +24,7 @@ public class User {
     private List<Issue> assignedIssues = new ArrayList<>();
 
     private int projectSize;
+
+
     
 }
