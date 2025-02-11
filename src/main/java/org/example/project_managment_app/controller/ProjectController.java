@@ -106,7 +106,7 @@ public class ProjectController {
         return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/invite")
+    @GetMapping("/accept_invitation")
     public ResponseEntity<Invitation> acceptInvite(
             @RequestParam String token,
             @RequestHeader("Authorization") String jwt
@@ -114,7 +114,7 @@ public class ProjectController {
         User user = userService.findUserProfileByJwt(jwt);
         Invitation invitation = invitationService.acceptInvitation(token, user.getId());
         projectService.addUserToProject(invitation.getProjectId(), user.getId());
-        return new ResponseEntity<>(invitation, HttpStatus.OK);
+        return new ResponseEntity<>(invitation, HttpStatus.ACCEPTED);
     }
 
 
