@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (commentOptional.isEmpty() || userOptional.isEmpty()) {
-            throw new Exception("User or issue not found with such id" + commentId + " " + userId);
+            throw new Exception("User or issue not found with such id " + commentId + " " + userId);
         }
 
 

@@ -6,6 +6,7 @@ import org.example.project_managment_app.repository.UserRepository;
 import org.example.project_managment_app.request.LoginRequest;
 import org.example.project_managment_app.response.AuthResponse;
 import org.example.project_managment_app.service.CustomUserDetailsImpl;
+import org.example.project_managment_app.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CustomUserDetailsImpl customUserDetails;
+    @Autowired
+    private SubscriptionService subscriptionService;
 
 
     @PostMapping("/signup")
@@ -46,7 +49,9 @@ public class AuthController {
         createdUser.setEmail(user.getEmail());
         createdUser.setFullName(user.getFullName());
 
-        userRepository.save(createdUser);
+        User savedUser = userRepository.save(createdUser);
+
+        subscriptionService.createSubscription(savedUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -62,8 +67,10 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest request) throws Exception{
 
-        String username = request.getUsername();
+        String username = request.getEmail();
         String password = request.getPassword();
+
+        System.out.println(username);
 
         Authentication authentication = authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);

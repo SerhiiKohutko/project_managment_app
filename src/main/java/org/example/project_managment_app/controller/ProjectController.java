@@ -1,6 +1,5 @@
 package org.example.project_managment_app.controller;
 
-import jakarta.mail.MessagingException;
 import org.example.project_managment_app.entities.Chat;
 import org.example.project_managment_app.entities.Invitation;
 import org.example.project_managment_app.entities.Project;
@@ -35,10 +34,10 @@ public class ProjectController {
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
+        System.out.println(category + " " + tag);
         List<Project> projects = projectService.getProjectByTeam(user, category, tag);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
-
 
     @GetMapping("/{projectId}")
     public ResponseEntity<Project> getProjectById(
@@ -72,6 +71,7 @@ public class ProjectController {
             @PathVariable long projectId,
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
+        System.out.println(projectId);
         User user = userService.findUserProfileByJwt(jwt);
         projectService.deleteProject(projectId, user.getId());
         return new ResponseEntity<>(new MessageResponse("Project Deleted Successfully"), HttpStatus.OK);
@@ -100,7 +100,7 @@ public class ProjectController {
     public ResponseEntity<MessageResponse> inviteProject(
             @RequestBody InviteRequest inviteRequest,
             @RequestHeader("Authorization") String jwt
-    ) throws MessagingException {
+    ) throws Exception {
         invitationService.sendInvitation(inviteRequest.getEmail(), inviteRequest.getProjectId());
         MessageResponse messageResponse = new MessageResponse("Invitation sent Successfully");
         return new ResponseEntity<>(messageResponse, HttpStatus.OK);

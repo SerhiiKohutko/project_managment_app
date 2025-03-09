@@ -26,8 +26,14 @@ public class JWTTokenValidator extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        if (path.startsWith("/auth/signup") || path.startsWith("/auth/signin")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String jwt = request.getHeader("Authorization");
+
 
         if (jwt != null) {
             jwt = jwt.substring(7);
@@ -49,8 +55,8 @@ public class JWTTokenValidator extends OncePerRequestFilter {
             }catch (Exception e) {
                 throw new BadCredentialsException("Invalid token");
             }
-            filterChain.doFilter(request, response);
         }
 
+        filterChain.doFilter(request, response);
     }
 }

@@ -32,6 +32,8 @@ public class ProjectServiceImpl implements ProjectService {
         createdProject.setCategory(project.getCategory());
         createdProject.getTeam().add(user);
 
+        createdProject = projectRepository.save(createdProject);
+
         Chat chat = new Chat();
         chat.setProject(createdProject);
         Chat projectChat = chatService.createChat(chat);
@@ -62,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project getProjectById(long projectId) throws Exception {
-        return projectRepository.findById(projectId).orElseThrow(() -> new Exception("Project not found"));
+        return projectRepository.findById(projectId).orElseThrow(() -> new Exception("Project not found" + " " + projectId));
     }
 
     @Override

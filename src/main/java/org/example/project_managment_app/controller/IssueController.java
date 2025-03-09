@@ -28,7 +28,7 @@ public class IssueController {
     }
 
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<Issue>> getIssuesByProjectId(@PathVariable long projectId) throws Exception {
+    public ResponseEntity<List<Issue>> getIssuesByProjectId(@PathVariable long projectId) {
         return ResponseEntity.ok(issueService.getIssuesByProjectId(projectId));
     }
 
@@ -36,6 +36,8 @@ public class IssueController {
     public ResponseEntity<IssueDTO> createIssue(@RequestBody IssueRequest issue,
                                                 @RequestHeader("Authorization") String token) throws Exception {
 
+        System.out.println(issue.toString());
+        System.out.println("fsdfsopfpwi34ri4itopi5oi45");
         User tokenuser = userService.findUserProfileByJwt(token);
         User user = userService.findUserById(tokenuser.getId());
 
@@ -48,7 +50,6 @@ public class IssueController {
             issueDTO.setTitle(createdIssue.getTitle());
             issueDTO.setStatus(createdIssue.getStatus());
             issueDTO.setProject(createdIssue.getProject());
-            issueDTO.setProjectId(createdIssue.getProjectId());
             issueDTO.setAssignee(createdIssue.getAssignee());
             issueDTO.setTags(createdIssue.getTags());
 
