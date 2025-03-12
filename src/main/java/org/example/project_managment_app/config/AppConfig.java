@@ -24,8 +24,8 @@ public class AppConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/api/**").authenticated().requestMatchers("/ws/**").permitAll().
+                        anyRequest().permitAll())
                 .addFilterBefore(new JWTTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
